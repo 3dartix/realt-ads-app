@@ -1,0 +1,60 @@
+server.port: ${SERVER_PORT:1113}
+
+swagger:
+    host: ${SWAGGER_ADDRESS:localhost:${SERVER_PORT:1113}}
+
+management.endpoints.web.exposure.include: "*"
+
+spring:
+    cloud:
+        compatibility-verifier:
+            enabled: false
+    main.allow-bean-definition-overriding: true
+    jackson:
+        serialization:
+            fail-on-empty-beans: false
+            write-dates-as-timestamps: false
+        deserialization:
+            fail-on-unknown-properties: false
+    datasource:
+#        url: jdbc:postgresql://${DB_HOST:localhost}:${DB_POST:5432}/${DB_NAME:ads}
+        url: jdbc:postgresql://${PGHOSTAllPATH:localhost:5432}/ads
+        username: ${DB_USERNAME:postgres}
+        password: ${DB_PASSWORD:admin}
+        driverClassName: org.postgresql.Driver
+    liquibase:
+        change-log: classpath:/db/changelog/changelog.xml
+    jpa:
+        database-platform: org.hibernate.dialect.PostgreSQL94Dialect
+        hibernate:
+            ddl-auto: update
+            naming.implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyJpaCompliantImpl
+        properties.hibernate:
+            dialect: org.hibernate.dialect.PostgreSQL94Dialect
+            format_sql: false
+            enable_lazy_load_no_trans: true
+        show-sql: false
+        open-in-view: false
+
+info:
+    app:
+        version: '@project.version@'
+        name: '@project.name@'
+
+logging:
+    level:
+        root: ${ROOT_LOGGER_LEVEL:INFO}
+        com.farzoom: ${FARZOOM_LOGGER_LEVEL:DEBUG}
+        org.springframework.web: ${WEB_LOGGER_LEVEL:INFO}
+        org.hibernate: ${HIBER_LOGGER_LEVEL:INFO}
+
+# NONE, BASIC, HEADERS, FULL;
+feign.client.config:
+    default.loggerLevel: ${FEIGN_LOGGER_LEVEL:NONE}
+    #company-client.loggerLevel = FULL
+app:
+    telegram:
+        name: ${TELEGRAM_NAME:}
+        token: ${TELEGRAM_TOKEN:}
+        admins:
+            - 65555017
